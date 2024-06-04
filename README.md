@@ -41,8 +41,8 @@ The matched data payload is base64 encoded, and then binary encoded using the fo
 ## Local testing
 
 1. Run `echo 'MATCHED_PAYLOAD_PRIVATE_KEY=uBS5eBttHrqkdY41kbZPdvYnNz8Vj0TvKIUpjB1y/GA=' > .dev.vars` (taken from https://github.com/cloudflare/matched-data-cli).
-2. In terminal window 1, run: `npm run dev`
-3. In terminal window 2, run: `npm run req`
+2. In terminal window 1, run: `npm run dev`.
+3. In terminal window 2, run: `npm run req`.
 4. Back in terminal window 1, you should see `[ 'test matched data' ]`.
 
 ### See Also
