@@ -1,0 +1,5 @@
+name = "matched-data-worker"
+main = "./src/index.ts"
+compatibility_date = "2024-05-07"
+account_id = "ACCOUNTID"
+route = "SUBDOMAIN.DOMAIN/logs*"
