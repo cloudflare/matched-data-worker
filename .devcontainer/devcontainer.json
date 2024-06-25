@@ -1,0 +1,13 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"features": {
+		"ghcr.io/dhoeric/features/act:1": {},
+		"ghcr.io/flexwie/devcontainer-features/op:1": {},
+		"ghcr.io/wxw-matt/devcontainer-features/command_runner:0": {},
+		"ghcr.io/wxw-matt/devcontainer-features/script_runner:0": {},
+		"ghcr.io/itsmechlark/features/1password:1": {
+			"version": "2.28"
+		},
+		"ghcr.io/elanhasson/devcontainer-features/dotnet-aspire-daily:1": {}
+	}
+}
