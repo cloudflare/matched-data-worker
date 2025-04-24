@@ -14,12 +14,12 @@
     "@hpke/core": "^1.2.7",
     "@hpke/dhkem-x25519": "^1.2.7",
     "base64-arraybuffer": "^1.0.2",
-    "itty-router": "^5.0.17",
-    "pako": "^2.1.0"
+    "itty-router": "^5.0.17"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240620.0",
     "@types/pako": "^2.0.3",
     "wrangler": "^3.61.0"
-  }
+  },
+  "packageManager": "pnpm@10.8.0+sha512.0e82714d1b5b43c74610193cb20734897c1d00de89d0e18420aebc5977fa13d780a9cb05734624e81ebd81cc876cd464794850641c48b9544326b5622ca29971"
 }
