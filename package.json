@@ -10,16 +10,14 @@
   "author": "Andre Bluehs <andre@cloudflare.com>",
   "license": "MIT",
   "dependencies": {
-    "@hpke/chacha20poly1305": "^1.2.7",
-    "@hpke/core": "^1.2.7",
-    "@hpke/dhkem-x25519": "^1.2.7",
+    "@hpke/chacha20poly1305": "^1.6.2",
+    "@hpke/core": "^1.7.2",
+    "@hpke/dhkem-x25519": "^1.6.2",
     "base64-arraybuffer": "^1.0.2",
-    "itty-router": "^5.0.17"
+    "itty-router": "^5.0.18"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240620.0",
-    "@types/pako": "^2.0.3",
-    "wrangler": "^3.61.0"
+    "wrangler": "^4.13.0"
   },
-  "packageManager": "pnpm@10.8.0+sha512.0e82714d1b5b43c74610193cb20734897c1d00de89d0e18420aebc5977fa13d780a9cb05734624e81ebd81cc876cd464794850641c48b9544326b5622ca29971"
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f"
 }
