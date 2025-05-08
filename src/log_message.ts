@@ -38,10 +38,10 @@ type LogMessage = {
   Source: string;
 };
 
-export async function parse(
+export function parse(
   rs: ReadableStream,
   MATCHED_PAYLOAD_PRIVATE_KEY: string
-): Promise<ReadableStream> {
+): ReadableStream {
   let temp = "";
   let firstItem = true;
 

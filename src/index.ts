@@ -26,7 +26,7 @@ router
       return new Response("No body", { status: 400 });
     }
 
-    const returnBody = await parse(req.body, env.MATCHED_PAYLOAD_PRIVATE_KEY);
+    const returnBody = parse(req.body, env.MATCHED_PAYLOAD_PRIVATE_KEY);
     /**
      * CONFIGURE ME
      * Edit the below line to send the decrypted payload somewhere useful
