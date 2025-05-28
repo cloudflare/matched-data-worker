@@ -2,6 +2,7 @@ import { CipherSuite, HkdfSha256 } from "@hpke/core";
 import { DhkemX25519HkdfSha256 } from "@hpke/dhkem-x25519";
 import { Chacha20Poly1305 } from "@hpke/chacha20poly1305";
 import { decode as b64decode } from "base64-arraybuffer";
+import { TransformNewlineStream } from "./transform_newline_stream";
 
 /**
  * @see https://github.com/cloudflare/matched-data-cli/blob/master/src/matched_data.rs#L11-L13
@@ -13,7 +14,20 @@ const suite = new CipherSuite({
   aead: new Chacha20Poly1305(),
 });
 
-export async function decode(payloadBase64: string, privateKeyBase64: string) {
+export function matchedDataTransformer(
+  privateKey: string,
+  dataProcessor: (data: string | null) => void
+) {
+  return new TransformNewlineStream(async (line: string) => {
+    const data = await decode(line, privateKey);
+    // we are pre-emptively await-ing this even though
+    // in the default example we don't need to in case
+    // any users in the future need to send the data somewhere
+    await dataProcessor(data);
+  });
+}
+
+async function decode(payloadBase64: string, privateKeyBase64: string) {
   try {
     const encData = decodebin(b64decode(payloadBase64));
 
