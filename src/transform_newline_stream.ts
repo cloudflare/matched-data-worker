@@ -17,9 +17,13 @@ export class TransformNewlineStream extends TransformStream {
       const end = flush ? "" : parts.pop() ?? "";
 
       for (const line of [start].concat(parts)) {
-        const res = await lineProcessor(line);
-        if (res) {
-          controller.enqueue(res + (flush ? "\n" : ""));
+        try {
+          const res = await lineProcessor(line);
+          if (res) {
+            controller.enqueue(res + (flush ? "\n" : ""));
+          }
+        } catch (err) {
+          console.error(err);
         }
       }
 
@@ -29,8 +33,9 @@ export class TransformNewlineStream extends TransformStream {
     super({
       start() {},
       async transform(chunk, controller) {
-        if (!chunk) return;
-        prevChunkEnd = await processChunk(chunk, prevChunkEnd, controller);
+        if (chunk) {
+          prevChunkEnd = await processChunk(chunk, prevChunkEnd, controller);
+        }
       },
       async flush(controller) {
         if (prevChunkEnd.length > 0) {

@@ -24,7 +24,7 @@
 ## Configure and Deploy
 
 1. Edit `wrangler.toml` to add `DOMAIN`, `SUBDOMAIN`, and `ACCOUNTID`.
-2. Edit `src/index.ts` (line 45) to send the decoded data anywhere you would like.
+2. Edit `src/index.ts` (line 36) to send the decoded data anywhere you would like.
 3. Run `npx wrangler secret put MATCHED_PAYLOAD_PRIVATE_KEY`:
    - Enter the private key generated when deploying a matched payload.
    - Refer to the [documentation](https://developers.cloudflare.com/waf/managed-rules/payload-logging/) for more information on generating the private/public key pair.

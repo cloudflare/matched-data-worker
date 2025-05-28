@@ -19,11 +19,15 @@ export function matchedDataTransformer(
   dataProcessor: (data: string | null) => void
 ) {
   return new TransformNewlineStream(async (line: string) => {
-    const data = await decode(line, privateKey);
-    // we are pre-emptively await-ing this even though
-    // in the default example we don't need to in case
-    // any users in the future need to send the data somewhere
-    await dataProcessor(data);
+    try {
+      const data = await decode(line, privateKey);
+      // we are pre-emptively await-ing this even though
+      // in the default example we don't need to in case
+      // any users in the future need to send the data somewhere
+      await dataProcessor(data);
+    } catch (err) {
+      console.error(err);
+    }
   });
 }
 

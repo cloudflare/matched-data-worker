@@ -10,17 +10,12 @@ const router = AutoRouter();
 
 router
   .put("/logs/:logdata+", async (req: IRequest, env: Env) => {
-    // Validation step
-    if (/\/ownership-challenge-[a-fA-F0-9]{8}.txt/.test(req.params.logdata)) {
-      return new Response("OK");
-    }
-
-    // Test push
-    // for some reason the inflate() from pako doesn't like the test.txt.gz file
-    // so we'll just accept it and move on as there's nothing of value in there anyway
+    // When configuring logpush the test.txt.gz isn't actually gzipped
+    // so our DecompressionStream("gzip") below fails, but we can just accept it
     if (/\d{8}\/test.txt.gz/.test(req.params.logdata)) {
       return new Response("OK");
     }
+
     // sanity check
     if (!req.body) {
       return new Response("No body", { status: 400 });
@@ -48,7 +43,8 @@ router
       )
       // we need to have a writable stream (even if it's a no-op)
       // so that we can await on a promise and complete our work
-      .pipeTo(new WritableStream());
+      .pipeTo(new WritableStream())
+      .catch((err) => console.error(err));
 
     return new Response("OK");
   })
