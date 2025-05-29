@@ -1,7 +1,6 @@
 import { CipherSuite, HkdfSha256 } from "@hpke/core";
 import { DhkemX25519HkdfSha256 } from "@hpke/dhkem-x25519";
 import { Chacha20Poly1305 } from "@hpke/chacha20poly1305";
-import { decode as b64decode } from "base64-arraybuffer";
 import { TransformNewlineStream } from "./transform_newline_stream";
 
 /**
@@ -69,4 +68,16 @@ function decodebin(enc: ArrayBuffer) {
         payload: new TextEncoder().encode(""),
       };
   }
+}
+
+function b64decode(base64: string) {
+  const binaryString = atob(base64);
+  const length = binaryString.length;
+  const bytes = new Uint8Array(length);
+
+  for (let i = 0; i < length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  return bytes.buffer;
 }
