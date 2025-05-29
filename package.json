@@ -14,8 +14,7 @@
     "@hpke/core": "^1.2.7",
     "@hpke/dhkem-x25519": "^1.2.7",
     "base64-arraybuffer": "^1.0.2",
-    "itty-router": "^5.0.17",
-    "pako": "^2.1.0"
+    "itty-router": "^5.0.17"
   },
   "devDependencies": {
     "wrangler": "^4.17.0"
