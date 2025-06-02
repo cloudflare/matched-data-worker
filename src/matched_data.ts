@@ -13,7 +13,7 @@ const suite = new CipherSuite({
   aead: new Chacha20Poly1305(),
 });
 
-export function matchedDataTransformer(
+export function decodeTransformer(
   privateKey: string,
   dataProcessor: (data: string | null) => void
 ) {

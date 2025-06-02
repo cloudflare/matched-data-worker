@@ -37,7 +37,7 @@ export type LogMessage = {
   Source: string;
 };
 
-export function logMessageTransformer() {
+export function parseTransformer() {
   return new TransformNewlineStream(async (line: string) => {
     try {
       const { Metadata } = JSON.parse(line) as LogMessage;

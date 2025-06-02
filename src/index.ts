@@ -1,6 +1,6 @@
 import { AutoRouter, type IRequest } from "itty-router";
-import { logMessageTransformer } from "./log_message";
-import { matchedDataTransformer } from "./matched_data";
+import { parseTransformer } from "./log_message";
+import { decodeTransformer } from "./matched_data";
 
 type Env = {
   MATCHED_PAYLOAD_PRIVATE_KEY: string;
@@ -26,9 +26,9 @@ router
     await req.body
       .pipeThrough(new DecompressionStream("gzip"))
       .pipeThrough(new TextDecoderStream("utf-8"))
-      .pipeThrough(logMessageTransformer())
+      .pipeThrough(parseTransformer())
       .pipeThrough(
-        matchedDataTransformer(
+        decodeTransformer(
           env.MATCHED_PAYLOAD_PRIVATE_KEY,
           // this is async in case data needs to be sent anywhere
           async (data: string | null) => {
