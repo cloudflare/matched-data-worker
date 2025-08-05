@@ -1,6 +1,6 @@
 import { AutoRouter, type IRequest } from "itty-router";
-import { parseTransformer } from "./log_message";
 import { decodeTransformer } from "./matched_data";
+import { LogMessage } from "./log_message";
 
 type Env = {
   MATCHED_PAYLOAD_PRIVATE_KEY: string;
@@ -26,20 +26,19 @@ router
     await req.body
       .pipeThrough(new DecompressionStream("gzip"))
       .pipeThrough(new TextDecoderStream("utf-8"))
-      .pipeThrough(parseTransformer())
       .pipeThrough(
         decodeTransformer(
           env.MATCHED_PAYLOAD_PRIVATE_KEY,
           // this is async in case data needs to be sent anywhere
-          async (data: string | null) => {
+          async (message: LogMessage) => {
             /**
              * CONFIGURE ME
              * Edit the below line to send each the decrypted payload somewhere useful
              * it is *strongly* recommended to *NOT* console.log the decrypted data in production
              */
-            // console.log(data);
-          }
-        )
+            // console.log(message.Metadata);
+          },
+        ),
       )
       // we need to have a writable stream (even if it's a no-op)
       // so that we can await on a promise and complete our work
