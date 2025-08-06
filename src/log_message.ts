@@ -1,12 +1,12 @@
-import { inflate } from "pako";
+import { TransformNewlineStream } from "./transform_newline_stream";
 
-type MetadataObject = {
+export type MetadataObject = {
   encrypted_matched_data: string;
   ruleset_version: string;
   version: string;
 };
 
-type LogMessage = {
+export type LogMessage = {
   Metadata: MetadataObject;
   Action: string;
   ClientASN: number;
@@ -37,19 +37,17 @@ type LogMessage = {
   Source: string;
 };
 
-export function parse(buff: ArrayBuffer): (MetadataObject | false)[] {
-  return inflate(buff, { to: "string" })
-    .trim()
-    .split("\n")
-    .map((line) => {
-      try {
-        // We are only returning the matched data contents
-        // because that is only what we care about in this script
-        // but the entire message could be returned if desired
-        const { Metadata }: LogMessage = JSON.parse(line);
-        return Metadata ?? false;
-      } catch {
-        return false;
-      }
-    });
+export function parseTransformer() {
+  return new TransformNewlineStream(async (line: string) => {
+    try {
+      const { Metadata } = JSON.parse(line) as LogMessage;
+      // We are only returning the matched data contents
+      // because that is only what we care about in this script
+      // but the entire message could be returned if desired
+      return Metadata.encrypted_matched_data;
+    } catch (err) {
+      console.error(err);
+      return undefined;
+    }
+  });
 }
