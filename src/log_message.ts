@@ -1,5 +1,3 @@
-import { TransformNewlineStream } from "./transform_newline_stream";
-
 export type MetadataObject = {
   encrypted_matched_data?: string;
   decrypted_matched_data?: string;

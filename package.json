@@ -1,6 +1,6 @@
 {
   "name": "matched-data-worker",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Example Cloudflare Worker to decrypt WAF matched payloads",
   "scripts": {
     "deploy": "wrangler deploy src/index.ts",
@@ -10,12 +10,13 @@
   "author": "Andre Bluehs <andre@cloudflare.com>",
   "license": "MIT",
   "dependencies": {
-    "@hpke/chacha20poly1305": "^1.2.7",
-    "@hpke/core": "^1.2.7",
-    "@hpke/dhkem-x25519": "^1.2.7",
+    "@hpke/chacha20poly1305": "^1.7.0",
+    "@hpke/core": "^1.7.3",
+    "@hpke/dhkem-x25519": "^1.6.3",
     "itty-router": "^5.0.17"
   },
   "devDependencies": {
-    "wrangler": "^4.17.0"
+    "@types/node": "^24.2.1",
+    "wrangler": "^4.28.1"
   }
 }

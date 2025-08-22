@@ -1,8 +1,6 @@
-type LineProcessor = (
-  line: string
-) => Promise<string | undefined | void | null>;
+type LineProcessor = (line: string) => Promise<string | undefined>;
 
-export class TransformNewlineStream extends TransformStream {
+export class TransformNewlineStream extends TransformStream<string, string> {
   constructor(lineProcessor: LineProcessor) {
     let prevChunkEnd = "";
 
@@ -10,11 +8,11 @@ export class TransformNewlineStream extends TransformStream {
       chunk: string,
       prevChunkEnd: string,
       controller: TransformStreamDefaultController,
-      flush = false
+      flush = false,
     ) {
       const parts = chunk.split("\n");
       const start = prevChunkEnd + (parts.shift() ?? "");
-      const end = flush ? "" : parts.pop() ?? "";
+      const end = flush ? "" : (parts.pop() ?? "");
 
       for (const line of [start].concat(parts)) {
         try {

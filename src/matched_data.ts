@@ -1,8 +1,8 @@
 import { CipherSuite, HkdfSha256 } from "@hpke/core";
 import { DhkemX25519HkdfSha256 } from "@hpke/dhkem-x25519";
 import { Chacha20Poly1305 } from "@hpke/chacha20poly1305";
-import { TransformNewlineStream } from "./transform_newline_stream";
-import { LogMessage, parseLine } from "./log_message";
+import { TransformNewlineStream } from "./streams/transform_newline";
+import { parseLine } from "./log_message";
 
 /**
  * @see https://github.com/cloudflare/matched-data-cli/blob/master/src/matched_data.rs#L11-L13
@@ -14,10 +14,7 @@ const suite = new CipherSuite({
   aead: new Chacha20Poly1305(),
 });
 
-export function decodeTransformer(
-  privateKey: string,
-  dataProcessor: (data: LogMessage) => Promise<void>,
-) {
+export function decodeTransformer(privateKey: string) {
   return new TransformNewlineStream(async (line: string) => {
     const message = parseLine(line);
     // some (most?) messages won't have an encrypted payload
@@ -31,8 +28,7 @@ export function decodeTransformer(
         ),
       };
     }
-
-    await dataProcessor(message);
+    return JSON.stringify(message);
   });
 }
 
