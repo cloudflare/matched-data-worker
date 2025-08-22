@@ -16,7 +16,7 @@ export function counterDestination() {
     },
     async flush() {
       console.log(
-        `Logs Recieved At: ${new Date().toLocaleString()}
+        `Logs Received At: ${new Date().toLocaleString()}
 Messages Count: ${count}
 Decrypted Payloads: ${decryptedMessages}`,
       );

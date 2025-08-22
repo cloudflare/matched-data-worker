@@ -28,16 +28,16 @@
 3. Run `npx wrangler secret put MATCHED_PAYLOAD_PRIVATE_KEY`:
    - Enter the private key generated when deploying a matched payload.
    - Refer to the [documentation](https://developers.cloudflare.com/waf/managed-rules/payload-logging/) for more information on generating the private/public key pair.
-   - If you want to use GCS, you also need `GCS_BUCKET_NAME` and `GCS_ACCESS_KEY_JSON`
+   - If you want to use GCS, you also need `GCS_BUCKET_NAME` and `GCS_ACCESS_KEY_JSON`.
 4. Run `npm run deploy`.
 
 # Destinations
 
-An example `desintaions/counter.ts` is given if you want to implement any others.
-
 Currently supported destinations:
 
  - Google Cloud Storage
+
+An example `desintations/counter.ts` is given if you want to implement any others.
 
 # Matched Payload Format
 
