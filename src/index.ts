@@ -1,9 +1,12 @@
 import { AutoRouter, type IRequest } from "itty-router";
-import { parseTransformer } from "./log_message";
 import { decodeTransformer } from "./matched_data";
+import { counterDestination } from "./destinations/counter";
+import { gcsDestination } from "./destinations/gcs";
 
 type Env = {
   MATCHED_PAYLOAD_PRIVATE_KEY: string;
+  GCS_ACCESS_KEY_JSON?: string;
+  GCS_BUCKET_NAME?: string;
 };
 
 const router = AutoRouter();
@@ -26,23 +29,26 @@ router
     await req.body
       .pipeThrough(new DecompressionStream("gzip"))
       .pipeThrough(new TextDecoderStream("utf-8"))
-      .pipeThrough(parseTransformer())
-      .pipeThrough(
-        decodeTransformer(
-          env.MATCHED_PAYLOAD_PRIVATE_KEY,
-          // this is async in case data needs to be sent anywhere
-          async (data: string | null) => {
-            /**
-             * CONFIGURE ME
-             * Edit the below line to send each the decrypted payload somewhere useful
-             * it is *strongly* recommended to *NOT* console.log the decrypted data in production
-             */
-            // console.log(data);
-          }
-        )
-      )
-      // we need to have a writable stream (even if it's a no-op)
-      // so that we can await on a promise and complete our work
+      .pipeThrough(decodeTransformer(env.MATCHED_PAYLOAD_PRIVATE_KEY))
+      .pipeThrough(counterDestination())
+      /**
+       * Warning!
+       * the GCS provider doesn't support streaming the file to the bucket.
+       * This means that messages must be buffered in memory and may cause issues.
+       */
+      // .pipeThrough(
+      //   await gcsDestination({
+      //     bucketName: env.GCS_BUCKET_NAME ?? "",
+      //     fileName() {
+      //       const [date, time] = new Date().toISOString().split("T");
+      //       return `waf-logs/${date}/${time}.txt`;
+      //     },
+      //     accessKeyJSON: JSON.parse(env.GCS_ACCESS_KEY_JSON ?? "{}") ?? {},
+      //   }),
+      // )
+      /**
+       * A dummy sync so that this promise will resolve
+       */
       .pipeTo(new WritableStream())
       .catch((err) => console.error(err));
 

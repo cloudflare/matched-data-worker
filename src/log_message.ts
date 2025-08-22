@@ -1,9 +1,7 @@
-import { TransformNewlineStream } from "./transform_newline_stream";
-
 export type MetadataObject = {
-  encrypted_matched_data: string;
-  ruleset_version: string;
-  version: string;
+  encrypted_matched_data?: string;
+  decrypted_matched_data?: string;
+  // ignoring other fields we don't need
 };
 
 export type LogMessage = {
@@ -37,17 +35,6 @@ export type LogMessage = {
   Source: string;
 };
 
-export function parseTransformer() {
-  return new TransformNewlineStream(async (line: string) => {
-    try {
-      const { Metadata } = JSON.parse(line) as LogMessage;
-      // We are only returning the matched data contents
-      // because that is only what we care about in this script
-      // but the entire message could be returned if desired
-      return Metadata.encrypted_matched_data;
-    } catch (err) {
-      console.error(err);
-      return undefined;
-    }
-  });
+export function parseLine(line: string) {
+  return JSON.parse(line) as LogMessage;
 }

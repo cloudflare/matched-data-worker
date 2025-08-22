@@ -1,7 +1,8 @@
 import { CipherSuite, HkdfSha256 } from "@hpke/core";
 import { DhkemX25519HkdfSha256 } from "@hpke/dhkem-x25519";
 import { Chacha20Poly1305 } from "@hpke/chacha20poly1305";
-import { TransformNewlineStream } from "./transform_newline_stream";
+import { TransformNewlineStream } from "./streams/transform_newline";
+import { parseLine } from "./log_message";
 
 /**
  * @see https://github.com/cloudflare/matched-data-cli/blob/master/src/matched_data.rs#L11-L13
@@ -13,20 +14,21 @@ const suite = new CipherSuite({
   aead: new Chacha20Poly1305(),
 });
 
-export function decodeTransformer(
-  privateKey: string,
-  dataProcessor: (data: string | null) => void
-) {
+export function decodeTransformer(privateKey: string) {
   return new TransformNewlineStream(async (line: string) => {
-    try {
-      const data = await decode(line, privateKey);
-      // we are pre-emptively await-ing this even though
-      // in the default example we don't need to in case
-      // any users in the future need to send the data somewhere
-      await dataProcessor(data);
-    } catch (err) {
-      console.error(err);
+    const message = parseLine(line);
+    // some (most?) messages won't have an encrypted payload
+    // so let's only do work if we need to
+    if (message.Metadata.encrypted_matched_data) {
+      message.Metadata = {
+        ...message.Metadata,
+        decrypted_matched_data: await decode(
+          message.Metadata.encrypted_matched_data,
+          privateKey,
+        ),
+      };
     }
+    return JSON.stringify(message);
   });
 }
 
@@ -37,7 +39,7 @@ async function decode(payloadBase64: string, privateKeyBase64: string) {
     const recipient = await suite.createRecipientContext({
       recipientKey: await suite.kem.importKey(
         "raw",
-        b64decode(privateKeyBase64)
+        b64decode(privateKeyBase64),
       ),
       enc: encData.encappedKey,
     });
@@ -45,8 +47,10 @@ async function decode(payloadBase64: string, privateKeyBase64: string) {
     const pt = await recipient.open(encData.payload);
     return new TextDecoder().decode(pt);
   } catch (err) {
-    console.error(err);
-    return null;
+    // let's not drop the message (i.e. throw an error)
+    // just because we can't decode the payload
+    console.log(err);
+    return undefined;
   }
 }
 
