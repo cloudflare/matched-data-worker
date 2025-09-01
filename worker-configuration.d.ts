@@ -4,8 +4,6 @@
 declare namespace Cloudflare {
 	interface Env {
 		MATCHED_PAYLOAD_PRIVATE_KEY: string;
-		GENERATED_FOR_ANDRE_FIREWALL_TEAM_PUBLIC: string;
-		GENERATED_FOR_ANDRE_FIREWALL_TEAM_PRIVATE: string;
 	}
 }
 interface Env extends Cloudflare.Env {}
