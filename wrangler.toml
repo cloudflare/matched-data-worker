@@ -1,6 +1,6 @@
 name = "matched-data-worker"
 main = "./src/index.ts"
 compatibility_date = "2025-05-27"
-account_id = "ACCOUNT_ID"
+account_id = "81187d8f4ed92d28ec09555cc26cf261"
 route = "SUBDOMAIN.DOMAIN/logs*"
 compatibility_flags = ["nodejs_compat"]
